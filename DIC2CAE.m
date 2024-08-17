@@ -88,17 +88,18 @@ for iO=1:nn
         loT(iO) = length(KI.Raw);
 
     elseif iO==2 % fix KIII to shear rather than modulus
-        [Jd,~,addKI,KIII,Dir] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
+        [~,~,~,KIII,Dir] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
         % correct from in-plane to out-of-plane shear
         if strcmpi(Ans,'Y')
             [Abaqus] = Adjust4Direction(Abaqus,Direction.Oldtrue);
             Direction.OldRaw(iO,1:length(Dir.Raw))=Dir.Raw;
             Direction.Oldtrue(iO)   = Dir.true;
             Direction.Olddiv(iO)    = Dir.div;
-            [Jd,~,addKI,KIII,Dir.Raw] = ...
+            [~,~,~,KIII,Dir.Raw] = ...
                 PlotKorJ(Abaqus,Maps.E,UnitOffsett,Maps.Alot);
         end
         KIII.Raw = KIII.Raw*2*Maps.G/Maps.E;
+	Jd.Raw = KIII.Raw.^2/(2*Maps.G);
         loT(iO)  = length(KIII.Raw);
         if ~isempty(Dir.Raw)
             Direction.Raw(iO,1:length(Dir.Raw))=Dir.Raw;
@@ -107,27 +108,25 @@ for iO=1:nn
         end
     end
     % J when calculating the SIF (more accurate)
-    JKRaw(iO,1:length(Jd.K.Raw)) = Jd.K.Raw;
+    JKRaw(iO,1:length(Jd.K.Raw)) = Jd.Raw;
     JRaw(iO,1:length(Jd.Raw)) = Jd.Raw; % J from J analysis
 end
 J.JKIII = JKRaw;
 J.JIII = JRaw;
 
 %% Cut to the same contour convergence (IoT value)
-KI.Raw = KI.Raw(1:min(loT));
 if nn==1
     J.Raw = J.JIII(:,1:min(loT));
     J.K.Raw = J.JKIII(:,1:min(loT));
 else
     J.Raw = sum(J.JIII(:,1:min(loT)));
     J.K.Raw = sum(J.JKIII(:,1:min(loT)));
-    addKI.Raw = addKI.Raw(1:min(loT));
-    KI.addKI.Raw = KI.Raw + addKI.Raw ;% add addtional KI to KI
     KIII.Raw = KIII.Raw(1:min(loT));
 end
 
 J.Raw = J.Raw(1:min(loT));
 J.K.Raw = J.K.Raw(1:min(loT));
+KI.Raw = KI.Raw(1:min(loT));
 KII.Raw = KII.Raw(1:min(loT));
 
 %%
@@ -138,15 +137,10 @@ J.true   = round(mean(rmoutliers(J.Raw(contrs:end))),dic);
 J.div    = round(std(rmoutliers(J.Raw(contrs:end)),1),dic);
 J.K.true   = round(mean(rmoutliers(J.K.Raw(contrs:end))),dic);
 J.K.div    = round(std(rmoutliers(J.K.Raw(contrs:end)),1),dic);
-% J.addJ.Raw  = JRaw(3,1:min(loT));
-% J.addJ.true = round(mean(rmoutliers(J.addJ.Raw(contrs:end))),dic);
-% J.addJ.div  = round(std(rmoutliers(J.addJ.Raw(contrs:end)),1),dic);
 
 KI.true  = round(mean(rmoutliers(KI.Raw(contrs:end))),dic);
 KI.div   = round(std(rmoutliers(KI.Raw(contrs:end)),1),dic);
 if nn==2
-    KI.addKI.true  = round(mean(rmoutliers(KI.addKI.Raw(contrs:end))),dic);
-    KI.addKI.div   = round(std(rmoutliers(KI.addKI.Raw(contrs:end)),1),dic);
     KIII.true = round(mean(rmoutliers(KIII.Raw(contrs:end))),dic);
     KIII.div  = round(std(rmoutliers(KIII.Raw(contrs:end)),1),dic);
 else

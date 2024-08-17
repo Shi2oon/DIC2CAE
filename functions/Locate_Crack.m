@@ -10,8 +10,8 @@ Fy = scatteredInterpolant(datum.X(:),datum.Y(:),datum.Uy(:),'natural');
 xLin  = linspace(min(datum.X(:)),max(datum.X(:)),length(unique(datum.X)));
 yLin  = linspace(min(datum.Y(:)),max(datum.Y(:)),length(unique(datum.Y)));
 [datum.X,datum.Y] = meshgrid(xLin,yLin);
-datum.Ux = Fx(datum.X(:),datum.Y(:)); 
-datum.Uy = Fy(datum.X(:),datum.Y(:)); 
+datum.Ux = Fx(datum.X(:),datum.Y(:));
+datum.Uy = Fy(datum.X(:),datum.Y(:));
 datum.Ux = reshape(datum.Ux,length(unique(datum.Y)),length(unique(datum.X)));
 datum.Uy = reshape(datum.Uy,length(unique(datum.Y)),length(unique(datum.X)));
 
@@ -35,16 +35,16 @@ set(gcf,'WindowStyle','normal')
 set(gcf,'position',[30 50 1300 950]);
 
 %% Crop and rotate
-    [datum] = Crack_align(datum);   % rotate data
-    opts.Interpreter = 'tex';       % Include the desired Default answer
-    opts.Default     = 'N';         % Use the TeX interpreter to format the question
-    quest            = 'Do you want to crop the map?';
-    answer           = questdlg(quest,'Boundary Condition','Y','N', opts);
-    if strcmpi(answer,'Y') % crop data
-        [datum] = Cropping10(datum.X,datum.Y,datum.Ux, datum.Uy);
-        datum = unifromMesh(datum);
-    end
-    %{
+[datum] = Crack_align(datum);   % rotate data
+opts.Interpreter = 'tex';       % Include the desired Default answer
+opts.Default     = 'N';         % Use the TeX interpreter to format the question
+quest            = 'Do you want to crop the map?';
+answer           = questdlg(quest,'Boundary Condition','Y','N', opts);
+if strcmpi(answer,'Y') % crop data
+    [datum] = Cropping10(datum.X,datum.Y,datum.Ux, datum.Uy);
+    datum = unifromMesh(datum);
+end
+%{
  % change mesh
     opts.Interpreter = 'tex';       % Include the desired Default answer
     opts.Default     = 'N';         % Use the TeX interpreter to format the question
@@ -67,15 +67,15 @@ if strcmpi(answer,'Y')
     set(gcf,'WindowStyle','normal')
     set(gcf,'position',[30 50 1300 950]);
 end
-    %}
-    %% get dim
+%}
+%% get dim
 if ~isfield(mechDat,"msk")
     % ATTENTION : crackpoints should be defined with the crack tip in first position.....
     title('Select the crack tip, start from crack tip',FontSize=20);
     [xo,yo] = ginput(2);
     title('Select the Crack mask, start from crack tip',FontSize=20);
     [xm,ym] = ginput(2);
-yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
+%     yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
 else
     xo = mechDat.msk.xo;    yo = mechDat.msk.yo;
     xm = mechDat.msk.xm;    ym = mechDat.msk.ym;
@@ -90,9 +90,9 @@ xLin       = datum.X(1,:);
 yLin       = datum.Y(:,1);
 % [~, index] = min(abs(yLin-yo(1)));      yo(1) = yLin(index);
 % [~, index] = min(abs(yLin-yo(2)));      yo(2) = yLin(index);
-[~, index] = min(abs(yLin-ym(1)));      ym(1) = yLin(index);   
+[~, index] = min(abs(yLin-ym(1)));      ym(1) = yLin(index);
 msk.ds1 = index;
-[~, index] = min(abs(yLin-ym(2)));      ym(2) = yLin(index);    
+[~, index] = min(abs(yLin-ym(2)));      ym(2) = yLin(index);
 msk.ds2 = index;
 %{
 %% adjust to min and max
