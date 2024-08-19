@@ -12,19 +12,23 @@ Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
 Maps.unique       = 'Calibration';
 
 %% INPUT MATERIAL PROPERTIES AND DATA
+% 'E' for Elastic material
 % Poisson's ratio,          Young's Modulus [Pa],      		Material Name     
   Maps.nu    = 0.3;         Maps.E  = 210E9;                Maps.Mat = 'Ferrite';
-% 'E' for Elastic or 'R' for Ramberg-Osgood or 'A' for Elastic-Anisotropic
-% or 'P' for elasto-plastic
   Maps.type  = 'E'; 
 % if 'Ramberg-Osgood' type of material input                Yield Stress [Pa] 
-%   Dir.Exponent = 26.67;     Dir.Yield_offset = 1.24;        Dir.yield = 4E9;
+% Maps.Exponent = 26.67;      Maps.Yield_offset = 1.24;        Maps.yield = 4E9;
+% Maps.type  = 'R';           Maps.Mat = 'Austenite';
+% Maps.E  = 193E9;            Maps.nu    = 0.3;
 % if 'Elastic-Anisotropic' you need to define the stifness tensor 
-%     Dir.Stiffness = NaN(6,6);
-% if 'Plastic' you need to define the stifness tensor 
-% Dir.type  = 'P'; 
-% Dir.Plastic_Strain = [0.0010,0.0023,0.0038,0.0059,0.0085,0.0120,0.0150,0.0205,0.0260,0.0336]'-0.0010;
-% Dir.Plastic_Stress = [150,350,547,849,1156,1569,1934,2616,3142,3912]'*1e6;
+% Maps.type  = 'A'; 
+% Maps.Stiffness = [  283  121  121   0   0   0
+%                     121  283  121   0   0   0
+%                     121  121  283   0   0   0
+%                     0    0    0     81  0   0
+%                     0    0    0     0   81  0
+%                     0    0    0     0   0   81]*1e9;
+% Maps.Mat = 'Ferrite';
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END of USER INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 Data = importdata(DataDirect);

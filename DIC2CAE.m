@@ -58,7 +58,7 @@ for iO=1:nn
         Dirxyz.msk,SaveD,ceil(min(size(DATA.X))*0.5-2),UnitOffset);
 
     if iO == 1      % Mode I
-        [Jd,~,KI,KII,Direction] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
+        [Jd,K,KI,KII,Direction] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
         if ~isempty(Direction.Raw)
             fprintf('\nRecommended J-integral direction is %d ± %d\t',...
                 round(Direction.true,1), Direction.div)
@@ -80,34 +80,30 @@ for iO=1:nn
             if strcmpi(Ans,'Y')
                 [Abaqus] = Adjust4Direction(Abaqus,Direction.true);
                 OldDirection = Direction;
-                [Jd,~,KI,KII,Direction] = ...
-                    PlotKorJ(Abaqus,Maps.E,UnitOffset,1);
+                [Jd,~,KI,KII,Direction] = PlotKorJ(Abaqus,Maps.E,UnitOffset,1);
                 Direction.OldRaw(iO,1:length(OldDirection.Raw))=OldDirection.Raw;
                 Direction.Oldtrue(iO)   = OldDirection.true;
                 Direction.Olddiv(iO)    = OldDirection.div;
             end
         end
+        if mean(isnan(KI.Raw))==1
+            KI = K.J;
+        end
         loT(iO) = length(KI.Raw);
 
     elseif iO==2 % fix KIII to shear rather than modulus
-        [~,~,~,KIII,Dir] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
+        [~,K,~,KIII,~] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
         % correct from in-plane to out-of-plane shear
         if strcmpi(Ans,'Y')
             [Abaqus] = Adjust4Direction(Abaqus,Direction.Oldtrue);
-            Direction.OldRaw(iO,1:length(Dir.Raw))=Dir.Raw;
-            Direction.Oldtrue(iO)   = Dir.true;
-            Direction.Olddiv(iO)    = Dir.div;
-            [~,~,~,KIII,Dir.Raw] = ...
-                PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
+            [~,~,~,KIII,~] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
+        end
+        if mean(isnan(KIII.Raw))==1
+            KIII = K.J;
         end
         KIII.Raw = KIII.Raw*2*Maps.G/Maps.E;
-    	Jd.Raw = (KIII.Raw*1e6).^2/(2*Maps.G);
+        Jd.Raw = (KIII.Raw*1e6).^2/(2*Maps.G);
         loT(iO)  = length(KIII.Raw);
-        if ~isempty(Dir.Raw)
-            Direction.Raw(iO,1:length(Dir.Raw))=Dir.Raw;
-            Direction.true(iO)=Dir.true;
-            Direction.div(iO)=Dir.div;
-        end
     end
     % J when calculating the SIF (more accurate)
     JKRaw(iO,1:length(Jd.K.Raw)) = Jd.Raw;
@@ -152,24 +148,11 @@ KII.true = round(mean(rmoutliers(KII.Raw(contrs:end))),dic);
 KII.div  = round(std(rmoutliers(KII.Raw(contrs:end)),1),dic);
 
 if ~isempty(Direction.Raw)
-    if nn==2
-        Direction.Raw = Direction.Raw(:,1:min(loT));
-        Direction.true= round(mean(rmoutliers(Direction.Raw(:,contrs:end,1)),2),1);
-        Direction.div = round(std(rmoutliers(Direction.Raw(:,contrs:end,1)),1,2),1);
-    else
-        Direction.true= round(mean(rmoutliers(Direction.Raw(contrs:end,1))),1);
-        Direction.div = round(std(rmoutliers(Direction.Raw(contrs:end,1)),1),1);
-    end
-
+    Direction.true= round(mean(rmoutliers(Direction.Raw(contrs:end,1))),1);
+    Direction.div = round(std(rmoutliers(Direction.Raw(contrs:end,1)),1),1);
     if strcmpi(Ans,'Y')
-        if nn==2
-        Direction.OldRaw = Direction.OldRaw(:,1:min(loT));
-        Direction.Oldtrue= round(mean(rmoutliers(Direction.OldRaw(:,contrs:end,1)),2),1);
-        Direction.Olddiv = round(std(rmoutliers(Direction.OldRaw(:,contrs:end,1)),1,2),1);
-        else
         Direction.Oldtrue= round(mean(rmoutliers(Direction.OldRaw(contrs:end,1))),1);
         Direction.Olddiv = round(std(rmoutliers(Direction.OldRaw(contrs:end,1)),1),1);
-        end
     end
 end
 %

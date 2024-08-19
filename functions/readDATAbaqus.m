@@ -62,6 +62,7 @@ for iv=1:size(J_in,1)
 end
 %% KII and KII
 try
+try
     idxS = strfind(S, 'OUTPKVAL_CRACK-1');
     idx1 = find(not(cellfun('isempty', idxS)));
     K_in = S(idx1(3)+1:idx2(2)-3) ;
@@ -127,6 +128,13 @@ for iv = 1:3:size(OutKJ,1)
     KII(count:count+size(OutKJ,2)-1) = OutKJ(iv+1,:);          
     JK(count:count+size(OutKJ,2)-1)  = OutKJ(iv+2,:); 
     count = count+size(OutKJ,2);
+end
+catch
+    disp('the material is not elastic, thus the SIFs cannot be calulated')
+    JK  = NaN(1,length(OutJ));
+    KI  = NaN(1,length(OutJ));
+    KII = NaN(1,length(OutJ));
+    Der_Deg = [];
 end
 fclose('all');
 %{
