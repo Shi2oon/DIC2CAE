@@ -98,7 +98,7 @@ for iO=1:nn
             Direction.Oldtrue(iO)   = Dir.true;
             Direction.Olddiv(iO)    = Dir.div;
             [~,~,~,KIII,Dir.Raw] = ...
-                PlotKorJ(Abaqus,Maps.E,UnitOffsett,Maps.Alot);
+                PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);
         end
         KIII.Raw = KIII.Raw*2*Maps.G/Maps.E;
     	Jd.Raw = (KIII.Raw*1e6).^2/(2*Maps.G);
