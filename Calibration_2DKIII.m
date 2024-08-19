@@ -10,7 +10,6 @@ Maps.units.xy     = Maps.input_unit;
 Maps.units.S      = 'Pa';      
 Maps.units.St     = 'Pa'; 
 Maps.pixel_size   = 1;           % if DIC values are in pixel, 1 if in physical units;
-Maps.Dim          = '3D';        % handles  2D and 3D data with option
 Maps.Operation    = 'DIC';       % Strain, xED = xEBSD, DIC = Displacement
 Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
 Maps.unique       = 'Calibration';
@@ -50,10 +49,14 @@ lin = Maps.stepsize*(ceil(-1/Maps.stepsize)+1/2):Maps.stepsize:Maps.stepsize*(fl
 DataSize = [numel(lin),numel(lin),1];
 Maps.X = Maps.X*saf;
 Maps.Y = Maps.Y*saf;
-Maps.Z = Maps.Z*saf;
+if KIII ~= 0
+    Maps.Z = Maps.Z*saf;
+end
 % displacement data
 Maps.Ux = ( 0.5*KI/G*sqrt(r/(2*pi)).*(+cos(th/2).*(kappa-cos(th)))+...
               0.5*KII/G*sqrt(r/(2*pi)).*(+sin(th/2).*(kappa+2+cos(th))))*saf;
 Maps.Uy = ( 0.5*KI/G*sqrt(r/(2*pi)).*(+sin(th/2).*(kappa-cos(th)))+...
               0.5*KII/G*sqrt(r/(2*pi)).*(-cos(th/2).*(kappa-2+cos(th))))*saf;
-Maps.Uz = ( 2*KIII/G*sqrt(r/(2*pi)).*sin(th/2))*saf;
+if KIII ~= 0
+    Maps.Uz = ( 2*KIII/G*sqrt(r/(2*pi)).*sin(th/2))*saf;
+end

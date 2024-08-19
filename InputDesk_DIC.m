@@ -7,7 +7,6 @@ Maps.units.xy     = 'mm';            % meter (m) or milmeter (mm) or micrometer(
 Maps.units.S      = 'Pa';      
 Maps.units.St     = 'Pa'; 
 Maps.pixel_size   = 1;              % if DIC values are in pixel, 1 if in physical units;
-Maps.Dim          = '2D';           % handles  2D and 3D data with option
 Maps.Operation    = 'DIC';          % Strain, xED = xEBSD, DIC = Displacement
 Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
 Maps.unique       = 'Calibration';

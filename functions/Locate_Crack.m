@@ -69,13 +69,13 @@ if strcmpi(answer,'Y')
 end
 %}
 %% get dim
-if ~isfield(mechDat,"msk")
+if ~isfield(mechDat,"msk") & strcmpi(answer,'N')
     % ATTENTION : crackpoints should be defined with the crack tip in first position.....
     title('Select the crack tip, start from crack tip',FontSize=20);
     [xo,yo] = ginput(2);
     title('Select the Crack mask, start from crack tip',FontSize=20);
     [xm,ym] = ginput(2);
-%     yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
+    % yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
 else
     xo = mechDat.msk.xo;    yo = mechDat.msk.yo;
     xm = mechDat.msk.xm;    ym = mechDat.msk.ym;

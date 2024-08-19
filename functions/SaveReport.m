@@ -3,8 +3,8 @@ function SaveReport(fileID,folder,MatPunique)
     Saveodb = pythonFileName(fullfile(folder, [MatPunique '.odb']));
     fprintf(fileID,'odb = session.openOdb("%s"); \n',Saveodb);
     fprintf(fileID,'session.viewports["Viewport: 1"].setValues(displayedObject=odb);\n');
-    fprintf(fileID,'session.fieldReportOptions.setValues(sort=ASCENDING);\n');
-    fprintf(fileID,'session.fieldReportOptions.setValues(columnLayout=SEPARATE_TABLES);\n');
+%     fprintf(fileID,'session.fieldReportOptions.setValues(sort=ASCENDING);\n');
+%     fprintf(fileID,'session.fieldReportOptions.setValues(columnLayout=SEPARATE_TABLES);\n');
     fprintf(fileID,'session.writeFieldReport( \n');
     SaveReport = pythonFileName(fullfile(folder, [MatPunique '.rpt']));
     fprintf(fileID,'    fileName="%s", \n',SaveReport);

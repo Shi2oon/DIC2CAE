@@ -62,17 +62,19 @@ for iO=1:nn
         if ~isempty(Direction.Raw)
             fprintf('\nRecommended J-integral direction is %d ± %d\t',...
                 round(Direction.true,1), Direction.div)
-            Ans = questdlg_timer(10,['J-integral direction is ' ...
+            Ans = questdlg_timer(60,['J-integral direction is ' ...
                 num2str(Direction.true) ' ± ' num2str(Direction.div) ...
                 ', Do you want to adjust?'],...
                 [ num2str(Direction.true) ' ± ' num2str(Direction.div)],...
-                'Y','N','C','C');
-            if Ans == 'C'
+                'Y','N','N');
+            if Ans == 'Y'
                 if (abs(Direction.true(1))-abs(Direction.div(1)))>5 && ...
                         (abs(Direction.true(1))/abs(Direction.div(1)))>5
-                    Ans = 'Y';fprintf(' is being corrected\n')
+                    Ans = 'Y';
+                    fprintf(' is being corrected\n')
                 else
-                    Ans = 'N';fprintf(' not corrected\n')
+                    Ans = 'N';
+                    fprintf(' not corrected due to huge uncertanity in the direction\n')
                 end
             end
             if strcmpi(Ans,'Y')
@@ -99,7 +101,7 @@ for iO=1:nn
                 PlotKorJ(Abaqus,Maps.E,UnitOffsett,Maps.Alot);
         end
         KIII.Raw = KIII.Raw*2*Maps.G/Maps.E;
-	Jd.Raw = KIII.Raw.^2/(2*Maps.G);
+    	Jd.Raw = (KIII.Raw*1e6).^2/(2*Maps.G);
         loT(iO)  = length(KIII.Raw);
         if ~isempty(Dir.Raw)
             Direction.Raw(iO,1:length(Dir.Raw))=Dir.Raw;
@@ -150,13 +152,24 @@ KII.true = round(mean(rmoutliers(KII.Raw(contrs:end))),dic);
 KII.div  = round(std(rmoutliers(KII.Raw(contrs:end)),1),dic);
 
 if ~isempty(Direction.Raw)
-    Direction.Raw = Direction.Raw(:,1:min(loT));
-    Direction.true= round(mean(rmoutliers(Direction.Raw(:,contrs:end,1)),2),1);
-    Direction.div = round(std(rmoutliers(Direction.Raw(:,contrs:end,1)),1,2),1);
+    if nn==2
+        Direction.Raw = Direction.Raw(:,1:min(loT));
+        Direction.true= round(mean(rmoutliers(Direction.Raw(:,contrs:end,1)),2),1);
+        Direction.div = round(std(rmoutliers(Direction.Raw(:,contrs:end,1)),1,2),1);
+    else
+        Direction.true= round(mean(rmoutliers(Direction.Raw(contrs:end,1))),1);
+        Direction.div = round(std(rmoutliers(Direction.Raw(contrs:end,1)),1),1);
+    end
+
     if strcmpi(Ans,'Y')
+        if nn==2
         Direction.OldRaw = Direction.OldRaw(:,1:min(loT));
         Direction.Oldtrue= round(mean(rmoutliers(Direction.OldRaw(:,contrs:end,1)),2),1);
         Direction.Olddiv = round(std(rmoutliers(Direction.OldRaw(:,contrs:end,1)),1,2),1);
+        else
+        Direction.Oldtrue= round(mean(rmoutliers(Direction.OldRaw(contrs:end,1))),1);
+        Direction.Olddiv = round(std(rmoutliers(Direction.OldRaw(contrs:end,1)),1),1);
+        end
     end
 end
 %
@@ -166,10 +179,5 @@ saveas(gcf, [Maps.results '_J_KI_II_III.fig']);
 saveas(gcf, [Maps.results '_J_KI_II_III.tif']);    %close all
 
 save([Maps.results '_DIC2CAE.mat'],'Maps','J','KI','KII',...
-                                   'KIII','Direction');
-
-%figure; plotDecomposed_v2(Maps)
-%saveas(gcf, [Maps.results '\U_Dec.fig']);
-%saveas(gcf, [Maps.results '\U_Dec.tif']);    close
-%}
+    'KIII','Direction');
 end
