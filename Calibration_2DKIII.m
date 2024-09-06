@@ -14,7 +14,7 @@ Maps.Operation    = 'DIC';       % Strain, xED = xEBSD, DIC = Displacement
 Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
 Maps.unique       = 'Calibration';
 Maps.results =fullfile(pwd,Maps.unique);
-sz = 50;
+sz = 100;
 
 switch Maps.units.xy
     case 'm'
