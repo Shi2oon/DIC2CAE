@@ -37,4 +37,8 @@ Maps.X  = RawData.X1;       Maps.Y = RawData.Y1;
 Maps.Ux = RawData.Ux;       Maps.Uy = RawData.Uy;
 % for stereo DIC
 % Maps.Z = RawData.Z1;      Maps.Uz = RawData.Uz;
+% [theta,RawData.Ux,RawData.Uy,RawData.Uz,rotCentre] = ...
+%     RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy);
+[theta,RawData.Ux,RawData.Uy,rotCentre] = ...
+    RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy);
 [J,KI,KII,KIII] = DIC2CAE(Maps);
