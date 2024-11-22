@@ -14,7 +14,7 @@ if size(Maps.Ux,2)*size(Maps.Ux,2) ~= size(Maps.Uz,2)*size(Maps.Uz,2)
     Maps.Uz = squeeze(Maps.Uz(2:end,2:end));
 end
 if ~isfield(Maps,"stepsize")
-    Maps.stepsize = unique(round(diff(unique(Maps.Y(:))),4));
+    Maps.stepsize = mean(unique(diff(unique(Maps.Y(:)))));
 end
 
 % this can be used to fix the number of converged J values through
@@ -47,15 +47,14 @@ for iO=1:nn
         % in case it is zero as Abaqus won't work
         Dirxyz.Uy = ones(size(Maps.Ux))*1e-12;
     end
-    alldata = Dirxyz;
-    [DATA,UnitOffset,Dirxyz, Dirxyz.msk,SaveD] = ...
-        Locate_Crack(alldata,Dirxyz.units.xy,Dirxyz.results,Dirxyz);
+    [Dirxyz,UnitOffset,Dirxyz.msk,SaveD] = ...
+        Locate_Crack(Dirxyz);
     if ~isfield(Maps,"msk")
         Maps.msk = Dirxyz.msk;
     end
     % prepare and run abaqus cae
     [Abaqus,~] = PrintRunCode(Dirxyz, ...
-        Dirxyz.msk,SaveD,ceil(min(size(DATA.X))*0.5-2),UnitOffset);
+        Dirxyz.msk,SaveD,ceil(min(size(Dirxyz.X))*0.5-2),UnitOffset);
 
     if iO == 1      % Mode I
         [Jd,K,KI,KII,Direction] = PlotKorJ(Abaqus,Maps.E,UnitOffset,Maps.Alot);

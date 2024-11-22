@@ -4,7 +4,7 @@ pwdfor = 'C:\Users\ak13\Documents\240712_CT_Al_5052';
 DataDirect = fullfile(pwdfor,'B0045.dat'); % file location
 Maps.results = erase(DataDirect,'.dat');
 % Domain size (square, crack tip at centre).
-Maps.units.xy     = 'mm';            % meter (m) or milmeter (mm) or micrometer(um);
+Maps.units.xy     = 'um';            % meter (m) or milmeter (mm) or micrometer(um);
 Maps.units.S      = 'Pa';      
 Maps.units.St     = 'Pa'; 
 Maps.pixel_size   = 1;              % if DIC values are in pixel, 1 if in physical units;

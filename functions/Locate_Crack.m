@@ -1,8 +1,8 @@
-function [datum,saf,mechDat, msk,SaveD] = ...
-    Locate_Crack(datum,input_unit,DataFile,mechDat)
+function [datum,saf, msk,SaveD] = ...
+    Locate_Crack(datum)
 % a function to take a dic file and then give the user the librity to
 % define the crack tip and mask which will be used in ababqus code
-[datum,input_unit, saf] = unist4Abaqus(datum,input_unit);% Units +
+[datum,datum.input_unit, saf] = unist4Abaqus(datum,datum.input_unit);% Units +
 
 %% restructure grids
 Fx = scatteredInterpolant(datum.X(:),datum.Y(:),datum.Ux(:),'natural');
@@ -25,12 +25,12 @@ close all;
 U  = (datum.Ux.^2+datum.Uy.^2).^0.5;
 % [~,~,~,Exy] = xgLOBAL(datum.M4.mesh,datum.M4.E11,datum.M4.E12,datum.M4.X,datum.M4.Y);
 imagesc(datum.X(1,:),datum.Y(:,1),U);
-c=colorbar; c.Label.String = ['U_{Mag.} [' input_unit ']'];
+c=colorbar; c.Label.String = ['U_{Mag.} [' datum.input_unit ']'];
 % end
 set(gca,'Ydir','normal');	axis image;
 title('Answer in the command line');
-xlabel(['X [' input_unit ' ]'],'FontSize',20,'FontName','Times New Roman');
-ylabel(['Y [' input_unit ' ]'],'FontSize',20,'FontName','Times New Roman');
+xlabel(['X [' datum.input_unit ' ]'],'FontSize',20,'FontName','Times New Roman');
+ylabel(['Y [' datum.input_unit ' ]'],'FontSize',20,'FontName','Times New Roman');
 set(gcf,'WindowStyle','normal')
 set(gcf,'position',[30 50 1300 950]);
 
@@ -42,7 +42,9 @@ quest            = 'Do you want to crop the map?';
 answer           = questdlg(quest,'Boundary Condition','Y','N', opts);
 if strcmpi(answer,'Y') % crop data
     [datum] = Cropping10(datum.X,datum.Y,datum.Ux, datum.Uy);
-    datum = unifromMesh(datum);
+    dat = unifromMesh(datum);
+    datum.X = dat.X;    datum.Y = dat.Y; 
+    datum.Ux = dat.Ux;  datum.Uy = dat.Uy;
 end
 %{
  % change mesh
@@ -69,7 +71,7 @@ if strcmpi(answer,'Y')
 end
 %}
 %% get dim
-if ~isfield(mechDat,"msk") & strcmpi(answer,'N')
+if ~isfield(datum,"msk") || strcmpi(answer,'Y')
     % ATTENTION : crackpoints should be defined with the crack tip in first position.....
     title('Select the crack tip, start from crack tip',FontSize=20);
     [xo,yo] = ginput(2);
@@ -77,8 +79,8 @@ if ~isfield(mechDat,"msk") & strcmpi(answer,'N')
     [xm,ym] = ginput(2);
     % yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
 else
-    xo = mechDat.msk.xo;    yo = mechDat.msk.yo;
-    xm = mechDat.msk.xm;    ym = mechDat.msk.ym;
+    xo = datum.msk.xo;    yo = datum.msk.yo;
+    xm = datum.msk.xm;    ym = datum.msk.ym;
 end
 %% get excat from data in
 xLin       = datum.X(1,:);
@@ -118,18 +120,18 @@ title({'Crack Position (x,y) from tip to the end is at ',[ num2str(xo(1)) ' , ' 
     num2str(xm(1)) ' , ' num2str(ym(1))], ['Picture Frame is at ' ...
     num2str(min(datum.X(1,:))) ' , ' num2str(min(datum.Y(:,1))) ' and ' ...
     num2str(max(datum.X(1,:))) ' , ' num2str(max(datum.Y(:,1)))],''});
-saveas(gcf, [DataFile '_Corr.tif']); close all
+saveas(gcf, [datum.results '_Corr.tif']); close all
 
 msk.xo = xo;            msk.yo = yo;
 msk.xm = xm;            msk.ym = ym;
-mechDat.xo = xo;        mechDat.yo = yo;
-mechDat.xm = xm;        mechDat.ym = ym;
+datum.xo = xo;        datum.yo = yo;
+datum.xm = xm;        datum.ym = ym;
 
 %% save cropped data
 datum.Ux(isnan(datum.Ux))=0;            datum.Uy(isnan(datum.Uy))=0;
 alldata = [datum.X(:), datum.Y(:), datum.Ux(:), datum.Uy(:)];
 alldata = table(alldata(:,1), alldata(:,2), alldata(:,3), alldata(:,4),...
     'VariableNames',{'x','y', 'displacement_x', 'displacement_y'});
-SaveD = [DataFile '_Data.dat'];
+SaveD = [datum.results '_Data.dat'];
 writetable(alldata, SaveD, 'Delimiter',' ');
 end

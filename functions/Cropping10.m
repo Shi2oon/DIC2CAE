@@ -30,16 +30,16 @@ for i=1:nargin-2
 end
 
 %% XY, steps and stifness
-Crop.X1   = X(min(Ycrop):max(Ycrop),min(Xcrop):max(Xcrop));
-Crop.Y1   = Y(min(Ycrop):max(Ycrop),min(Xcrop):max(Xcrop));
-Crop.X1   = Crop.X1 - min(min(Crop.X1));  	Crop.Y1   = Crop.Y1 - min(min(Crop.Y1));
-if (Crop.X1(1) - Crop.X1(end))>0;         Crop.X1   = flip(Crop.X1,2);         end
-if (Crop.Y1(1) - Crop.Y1(end))>0;         Crop.Y1   = flip(Crop.Y1,1);         end
+Crop.X   = X(min(Ycrop):max(Ycrop),min(Xcrop):max(Xcrop));
+Crop.Y   = Y(min(Ycrop):max(Ycrop),min(Xcrop):max(Xcrop));
+Crop.X   = Crop.X - min(min(Crop.X));  	Crop.Y   = Crop.Y - min(min(Crop.Y));
+if (Crop.X(1) - Crop.X(end))>0;         Crop.X   = flip(Crop.X,2);         end
+if (Crop.Y(1) - Crop.Y(end))>0;         Crop.Y   = flip(Crop.Y,1);         end
 
 %%
 close all;              fig = subplot(1,1,1); 
 U  = (Crop.Ux.^2+Crop.Uy.^2).^0.5;
-imagesc(Crop.X1(1,:),Crop.Y1(:,1),U)
+imagesc(Crop.X(1,:),Crop.Y(:,1),U)
 axis image;             set(gca,'Ydir','normal');   % axis off;  
 colormap jet;           colorbar;                            
 xlabel('X [Raw Data Units]');          ylabel('Y [Raw Data Units]');
