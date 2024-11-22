@@ -10,17 +10,19 @@ if isempty(reply)
     reply = 'Y';
 end
 if(reply=='N')
-    alldata = [alldat.X1(:) alldat.Y1(:) alldat.Ux(:) alldat.Uy(:)];
+    alldata = [alldat.X(:) alldat.Y(:) alldat.Ux(:) alldat.Uy(:)];
     Tri(1:2,:)  = flipud(alldata(:,1:2)');
     Tri(3:4,:)  = flipud(alldata(:,3:4)');
 
     Tri = sortrows(Tri',[1 2])';
     alldata   = Tri';
-    [~,alldat]   = reshapeData(alldata);
+    [~,alldt]   = reshapeData(alldata);
+    alldat.X = alldt.X1;    alldat.Y = alldt.Y1; 
+    alldat.Ux = alldt.Ux;    alldat.Uy = alldt.Uy;
     
     close all;    
     
-imagesc(alldat.X1(1,:),alldat.Y1(:,1),alldat.Uy);      
+imagesc(alldt.X1(1,:),alldt.Y1(:,1),alldt.Uy);      
 set(gca,'Ydir','normal');	axis image;
 title('Answer in the command line');
 xlabel('X','FontSize',20,'FontName','Times New Roman');          
