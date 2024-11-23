@@ -5,10 +5,7 @@ function [Maps,M4,alldata] = Calibration_2DKIII(KI,KII,KIII)
 % Domain size (square, crack tip at centre).
 Maps.Mat          = 'Calibration';
 Maps.type         = 'E';% 'A' if u want to use anistropic matrix or 'E' for linear elastic
-Maps.input_unit   = 'um';        % meter (m) or milmeter (mm) or micrometer(um);
-Maps.units.xy     = Maps.input_unit; 
-Maps.units.S      = 'Pa';      
-Maps.units.St     = 'Pa'; 
+Maps.input_unit   = 'um';        % meter (m) or milmeter (mm) or micrometer(um); 
 Maps.pixel_size   = 1;           % if DIC values are in pixel, 1 if in physical units;
 Maps.Operation    = 'DIC';       % Strain, xED = xEBSD, DIC = Displacement
 Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
@@ -16,7 +13,7 @@ Maps.unique       = 'Calibration';
 Maps.results =fullfile(pwd,Maps.unique);
 sz = 100;
 
-switch Maps.units.xy
+switch Maps.input_unit
     case 'm'
         saf = 1;
     case 'mm'

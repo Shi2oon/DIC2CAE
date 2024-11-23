@@ -7,8 +7,6 @@ if ~isfield(Maps,"Uz")
     Maps.Uz = ones(size(Maps.Ux))*1e-12;
     Maps.Z = zeros(size(Maps.X));
     nn =1;
-else size(Maps.Uz,3) ~=1
-    Maps.Uz = squeeze(Maps.Uz(:,:,1));
 end
 if size(Maps.Ux,2)*size(Maps.Ux,2) ~= size(Maps.Uz,2)*size(Maps.Uz,2)
     Maps.Uz = squeeze(Maps.Uz(2:end,2:end));
@@ -118,13 +116,13 @@ if nn==1
 else
     J.Raw = sum(J.JIII(:,1:min(loT)));
     J.K.Raw = sum(J.JKIII(:,1:min(loT)));
-    KIII.Raw = KIII.Raw(1:min(loT));
+    KIII.Raw = abs(KIII.Raw(1:min(loT)));
 end
 
 J.Raw = J.Raw(1:min(loT));
 J.K.Raw = J.K.Raw(1:min(loT));
 KI.Raw = KI.Raw(1:min(loT));
-KII.Raw = KII.Raw(1:min(loT));
+KII.Raw = abs(KII.Raw(1:min(loT)));
 
 %%
 contrs   = length(J.Raw);        contrs = contrs - round(contrs*0.4);
@@ -156,7 +154,7 @@ if ~isempty(Direction.Raw)
 end
 %
 %%
-plotJKIII(KI,KII,KIII,J,Maps.stepsize,Maps.units.xy)
+plotJKIII(KI,KII,KIII,J,Maps.stepsize,Maps.input_unit)
 saveas(gcf, [Maps.results '_J_KI_II_III.fig']);
 saveas(gcf, [Maps.results '_J_KI_II_III.tif']);    %close all
 

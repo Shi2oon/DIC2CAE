@@ -41,13 +41,14 @@ Maps.Ux = RawData.Ux;       Maps.Uy = RawData.Uy;
 % [theta,RawData.Ux,RawData.Uy,RawData.Uz,rotCentre] = ...
 %     RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy);
 [data] = Cropping10(Maps.X,Maps.Y,Maps.Ux, Maps.Uy);
-Maps.X = data.xMap_px;
-Maps.Y = data.yMap_px;
-Maps.Ux = data.uxMap_px;
-Maps.Uy = data.uyMap_px;
+Maps.X = data.X;
+Maps.Y = data.Y;
+Maps.Ux = data.Ux;
+Maps.Uy = data.Uy;
 Maps.Uy(Maps.Uy==0)=NaN;    Maps.Ux(Maps.Ux==0)=NaN;
 Maps.Uy = inpaint_nans(Maps.Uy);
 Maps.Ux = inpaint_nans(Maps.Ux);
 [theta,Maps.Ux,Maps.Uy,rotCentre] = ...
     RotRemoving('true',Maps.X,Maps.Y,Maps.Ux,Maps.Uy);
+Map.input_unit = Maps.units.xy;
 [J,KI,KII,KIII] = DIC2CAE(Maps);

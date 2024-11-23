@@ -2,7 +2,7 @@ function [datum,saf, msk,SaveD] = ...
     Locate_Crack(datum)
 % a function to take a dic file and then give the user the librity to
 % define the crack tip and mask which will be used in ababqus code
-[datum,datum.input_unit, saf] = unist4Abaqus(datum,datum.input_unit);% Units +
+[~,~, saf] = unist4Abaqus(datum,datum.input_unit);% Units +
 
 %% restructure grids
 Fx = scatteredInterpolant(datum.X(:),datum.Y(:),datum.Ux(:),'natural');
@@ -75,9 +75,10 @@ if ~isfield(datum,"msk") || strcmpi(answer,'Y')
     % ATTENTION : crackpoints should be defined with the crack tip in first position.....
     title('Select the crack tip, start from crack tip',FontSize=20);
     [xo,yo] = ginput(2);
+    % yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
+    line(xo,yo,'Color','w','LineStyle','-.','linewidth',2)
     title('Select the Crack mask, start from crack tip',FontSize=20);
     [xm,ym] = ginput(2);
-    % yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
 else
     xo = datum.msk.xo;    yo = datum.msk.yo;
     xm = datum.msk.xm;    ym = datum.msk.ym;
