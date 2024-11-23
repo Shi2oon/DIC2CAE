@@ -41,8 +41,8 @@ opts.Default     = 'N';         % Use the TeX interpreter to format the question
 quest            = 'Do you want to crop the map?';
 answer           = questdlg(quest,'Boundary Condition','Y','N', opts);
 if strcmpi(answer,'Y') % crop data
-    [datum] = Cropping10(datum.X,datum.Y,datum.Ux, datum.Uy);
-    dat = unifromMesh(datum);
+    [dat] = Cropping10(datum.X,datum.Y,datum.Ux, datum.Uy);
+    dat = unifromMesh(dat);
     datum.X = dat.X;    datum.Y = dat.Y; 
     datum.Ux = dat.Ux;  datum.Uy = dat.Uy;
 end
@@ -75,7 +75,7 @@ if ~isfield(datum,"msk") || strcmpi(answer,'Y')
     % ATTENTION : crackpoints should be defined with the crack tip in first position.....
     title('Select the crack tip, start from crack tip',FontSize=20);
     [xo,yo] = ginput(2);
-    % yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
+%     yo = [yo(1); yo(1)];     %xm = [xo(1); xm(2)]; if the crack is on x axis
     line(xo,yo,'Color','w','LineStyle','-.','linewidth',2)
     title('Select the Crack mask, start from crack tip',FontSize=20);
     [xm,ym] = ginput(2);
