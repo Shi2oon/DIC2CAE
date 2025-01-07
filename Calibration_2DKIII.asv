@@ -1,6 +1,5 @@
 % This code genereate synthatic DIC data based on the inputed stress 
-% intesity factor values. Feel free to amend the "User Inpust" section with
-% other materials propetires
+% intesity factor values. Feel free to amend the "User
 % for more details see 
 % https://ora.ox.ac.uk/objects/uuid:f2ba08f3-4a27-4619-92ed-bcd3834dadf0/files/d765371972, page 261
 
@@ -16,8 +15,6 @@ Maps.Operation    = 'DIC';       % Strain, xED = xEBSD, DIC = Displacement
 Maps.stressstat   = 'plane_stress'; % 'plane_stress' OR 'plane_strain'
 Maps.unique       = 'Calibration';
 Maps.results =fullfile(pwd,Maps.unique);
-Maps.E = 210e9;             % Young's Modulus
-Maps.nu = 0.3;             % Poisson ratio
 sz = 100;
 
 %% start
@@ -32,6 +29,8 @@ switch Maps.input_unit
         saf = 1e9;
 end
 
+Maps.E = 210e9;             % Young's Modulus
+Maps.nu = 0.3;             % Poisson ratio
 G = Maps.E/(2*(1 + Maps.nu));  % Shear modulus
     switch Maps.stressstat
         case 'plane_strain'
@@ -63,6 +62,5 @@ Maps.Uy = ( 0.5*KI/G*sqrt(r/(2*pi)).*(+sin(th/2).*(kappa-cos(th)))+...
 if KIII ~= 0
     Maps.Uz = ( 2*KIII/G*sqrt(r/(2*pi)).*sin(th/2))*saf;
 end
-mkdir(fullfile(pwd,[num2str(KI) '-' num2str(KII) '-' num2str(KIII) 'MPa']))
 
 end

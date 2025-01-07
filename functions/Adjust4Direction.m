@@ -28,7 +28,7 @@ function [folder]=Adjust4Direction(saveTo,Angle)
 %     C{1}(end-5:end-1)=[];
     finalform = C{1}(1:end);
     iv=1;
-    fileID = fopen([fileparts(saveTo) '\Job-' num2str(iv) '.inp'],'w');
+    fileID = fopen(fullfile(fileparts(saveTo), ['Job-' num2str(iv) '.inp']),'w');
     for i=1:size(finalform,1);          stri = finalform(i);
         if ~cellfun('isempty',stri);    fprintf(fileID,'%s\n',char(stri)); end
     end
@@ -56,7 +56,7 @@ fprintf(fileID,'from sketch import * \n');
 fprintf(fileID,'from visualization import * \n');
 fprintf(fileID,'from connectorBehavior import * \n');
 fprintf(fileID,'mdb.ModelFromInputFile(inputFileName= \n');
-SaveTmp = pythonFileName([folder '/Job-' num2str(NumB) '.inp']);
+SaveTmp = pythonFileName(fullfile(folder, ['Job-' num2str(NumB) '.inp']));
 fprintf(fileID,'    "%s",  \n',SaveTmp);
 fprintf(fileID,'    name="Job-%d") \n',NumB);
 fprintf(fileID,'from part import *\n');
@@ -116,5 +116,5 @@ fclose(fileID);
 PWD =pwd;           cd(folder)
 system(['abaqus cae ','noGUI','=Abaqus_script.py']); % Windows system
 cd(PWD);
-OtF = [folder '\Number_' num2str(NumB)];
+OtF = fullfile(folder, ['Number_' num2str(NumB)]);
 end

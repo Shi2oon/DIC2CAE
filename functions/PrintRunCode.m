@@ -1,6 +1,6 @@
 function [folder,CAE ] = PrintRunCode(MatP, maskdim,SaveD,len,offset)
 [folder,~,~] = fileparts(SaveD);
-folder = [folder '\Abaqus Output'];     mkdir(folder);
+folder = fullfile(folder, 'Abaqus Output');     mkdir(folder);
 fileid = fullfile(folder, 'Abaqus_script.py');
 fileID = fopen(fileid,'w');
 
@@ -42,13 +42,13 @@ PWD =pwd;           cd(folder)
 system(['abaqus cae ','noGUI','=Abaqus_script.py']); % Windows system
 % unix(['abaqus cae ','noGUI','=Abaqus_script.py']);   % Unix system
 
-delete([folder '\' MatP.unique '.log']);
-delete([folder '\' MatP.unique '.msg']);
-delete([folder '\' MatP.unique '.prt']);
-delete([folder '\' MatP.unique '.sim']);
-delete([folder '\' MatP.unique '.sta']);
-delete([folder '\' MatP.unique '.com']);
-delete([folder '\' MatP.unique 'Done.tmp']);
+delete(fullfile(folder , [MatP.unique '.log']));
+delete(fullfile(folder , [MatP.unique '.msg']));
+delete(fullfile(folder , [MatP.unique '.prt']));
+delete(fullfile(folder , [MatP.unique '.sim']));
+delete(fullfile(folder , [MatP.unique '.sta']));
+delete(fullfile(folder , [MatP.unique '.com']));
+delete(fullfile(folder , [MatP.unique 'Done.tmp']));
 
 CAE = exist([MatP.unique '.rpt'],'file');
 if ~exist([MatP.unique '.rpt'],'file')

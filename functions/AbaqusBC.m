@@ -71,12 +71,12 @@ if isempty(Crack)
     hold on; plot(xo(1),yo(1),'pk','LineStyle','-.','MarkerSize',14,...
     'MarkerEdgeColor','w','MarkerFaceColor','k'); hold off;  
     legend('Crack Tip','location','best')
-    saveas(gcf,[resultsDir '\DIC2ABAQUS Coodrinate.fig']);
-    saveas(gcf,[resultsDir '\DIC2ABAQUS Coodrinate.tif'],'tiffn');  close
+    saveas(gcf,fullfile(resultsDir, 'DIC2ABAQUS Coodrinate.fig'));
+    saveas(gcf,fullfile(resultsDir, 'DIC2ABAQUS Coodrinate.tif'),'tiffn');  close
 end
 
 [~,Kl,~] = fileparts(resultsDir);
-resultsDir = [resultsDir '\Abaqus Model'];     mkdir(resultsDir);
+resultsDir = fullfile(resultsDir, 'Abaqus Model');     mkdir(resultsDir);
 
 % unit set
 switch MatP.input_unit
@@ -323,7 +323,7 @@ finalform = [Nodes;Ele;Assmp;patchASSEM;Mate;patchBC;Outputd];
 
 %% Write outputfile
 fprintf('10. Writing .inp file .. ');
-BCf = [resultsDir '\' MatP.unique '.inp'];
+BCf = fullfile(resultsDir, [MatP.unique '.inp']);
 fileID = fopen(BCf,'w');
 for i=1:size(finalform,1)
     stri = finalform(i);

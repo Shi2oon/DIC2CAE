@@ -74,8 +74,8 @@ if ~exist('pp','var'); close all;
     set(gcf,'WindowStyle','normal');
     set(gcf,'position',[600,100,950,850]);
     axis tight;     xlim([0 length(J.Raw)+2]);
-    box off; saveas(gcf, [saveto '\' Ond '_J.fig']);
-    saveas(gcf, [saveto '\' Ond '_J.tif']); close;
+    box off; saveas(gcf, fullfile(saveto,[Ond '_J.fig']));
+    saveas(gcf, fullfile(saveto,[Ond '_J.tif'])); close;
     
     %% for K
     plot(K.J_K.Raw,'r--o','MarkerEdgeColor','r','LineWidth',1.5,'MarkerFaceColor','r'); hold on
@@ -88,8 +88,8 @@ if ~exist('pp','var'); close all;
     set(gcf,'WindowStyle','normal');    ylim([0 inf]);
     legend('K_{eff-SIFs}','K_{eff-J-integral}','K_{eff-I,II}','location','best','box','off');
     set(gcf,'position',[600,20,950,950]);   xlim([0 length(J.Raw)+2])
-    box off; saveas(gcf, [saveto '\' Ond '_Keffs.fig']);
-    saveas(gcf, [saveto '\' Ond '_Keffs.tif']); close;
+    box off; saveas(gcf, fullfile(saveto,[Ond '_Keffs.fig']));
+    saveas(gcf, fullfile(saveto,[Ond '_Keffs.tif'])); close;
     
     %% for K1 and K2
     plot(KI.Raw,'r--o','MarkerEdgeColor','r','LineWidth',1.5,'MarkerFaceColor','r');  hold on;
@@ -101,8 +101,8 @@ if ~exist('pp','var'); close all;
     set(gcf,'WindowStyle','normal');
     if KII.true>0 && KI.true>0;     ylim([0 inf]);      end
     set(gcf,'position',[600,100,950,850]);  xlim([0 length(J.Raw)+2])
-    box off; saveas(gcf, [saveto '\' Ond '_KI and KII.fig']);
-    saveas(gcf, [saveto '\' Ond '_KI and KII.tif']);    close
+    box off; saveas(gcf, fullfile(saveto,[Ond '_KI and KII.fig']));
+    saveas(gcf, fullfile(saveto,[Ond '_KI and KII.tif']));    close
     
     %% plot ALL K
     plot(K.J_K.Raw,'k--o','MarkerEdgeColor','k','LineWidth',1.5,'MarkerFaceColor','k');hold on;
@@ -117,8 +117,8 @@ if ~exist('pp','var'); close all;
     set(gcf,'WindowStyle','normal'); set(gcf,'position',[600,50,1000,920]);
     axis tight;     xlim([0 length(J.Raw)+2]);
     if min([KII.Raw(:); KI.Raw(:)])>0;     ylim([0 inf]);      end
-    box off; saveas(gcf, [saveto '\' Ond '_Keff, KI and KII.fig']);
-    saveas(gcf, [saveto '\' Ond '_Keff, KI and KII.tif']); close
+    box off; saveas(gcf, fullfile(saveto,[Ond '_Keff, KI and KII.fig']));
+    saveas(gcf, fullfile(saveto,[Ond '_Keff, KI and KII.tif'])); close
     
     %%
     fig=figure;set(fig,'defaultAxesColorOrder',[[0 0 0]; [1 0 0]]);
@@ -137,8 +137,8 @@ if ~exist('pp','var'); close all;
         'location','northoutside','box','off');
     set(gcf,'WindowStyle','normal');
     set(gcf,'position',[60,10,850,990]);  xlim([0 length(J.Raw)+2])
-    box off; saveas(gcf, [saveto '\' Ond '_KI, KII and J.fig']);
-    saveas(gcf, [saveto '\' Ond '_KI, KII and J.tif']);    %close
+    box off; saveas(gcf, fullfile(saveto,[Ond '_KI, KII and J.fig']));
+    saveas(gcf, fullfile(saveto,[Ond '_KI, KII and J.tif']));    %close
     
     %%
     if ~isempty(Direction.Raw)
@@ -160,8 +160,8 @@ if ~exist('pp','var'); close all;
             'location','northoutside','box','off');
         set(gcf,'WindowStyle','normal');
         set(gcf,'position',[60,10,850,990]);  xlim([0 length(J.Raw)+2])
-        box off; saveas(gcf, [saveto '\' Ond '_KI, KII and D.fig']);
-        saveas(gcf, [saveto '\' Ond '_KI, KII and D.tif']);    %close
+        box off; saveas(gcf, fullfile(saveto,[Ond '_KI, KII and D.fig']));
+        saveas(gcf, fullfile(saveto,[Ond '_KI, KII and D.tif']));    %close
     end
     
 else
@@ -182,8 +182,8 @@ else
             'location','northoutside','box','off');
         set(gcf,'WindowStyle','normal');
         set(gcf,'position',[60,10,850,1050]);  xlim([0 length(J.Raw)+2])
-        box off; saveas(gcf, [saveto '\' Ond '_KI, KII and J.fig']);
-        saveas(gcf, [saveto '\' Ond '_KI, KII and J.tif']);    close
+        box off; saveas(gcf, fullfile(saveto,[Ond '_KI, KII and J.fig']));
+        saveas(gcf, fullfile(saveto,[Ond '_KI, KII and J.tif']));    close
         
         if ~isempty(Direction.Raw)
             Direction.Raw = Direction.Raw(1:length(KII.Raw));
@@ -204,8 +204,8 @@ else
                 dic)) '^o'],'location','northoutside','box','off');
             set(gcf,'WindowStyle','normal');
             set(gcf,'position',[60,10,850,990]);  xlim([0 length(J.Raw)+2])
-            box off; saveas(gcf, [saveto '\' Ond '_KI, KII and D.fig']);
-            saveas(gcf, [saveto '\' Ond '_KI, KII and D.tif']);    close
+            box off; saveas(gcf, fullfile(saveto,[Ond '_KI, KII and D.fig']));
+            saveas(gcf, fullfile(saveto,[Ond '_KI, KII and D.tif']));    close
         end
     end
 end
