@@ -18,7 +18,7 @@ Maps.unique       = 'Calibration';
 Maps.results =fullfile(pwd,Maps.unique);
 Maps.E = 210e9;             % Young's Modulus
 Maps.nu = 0.3;             % Poisson ratio
-sz = 100;
+sz = 50;
 
 %% start
 switch Maps.input_unit
@@ -63,6 +63,6 @@ Maps.Uy = ( 0.5*KI/G*sqrt(r/(2*pi)).*(+sin(th/2).*(kappa-cos(th)))+...
 if KIII ~= 0
     Maps.Uz = ( 2*KIII/G*sqrt(r/(2*pi)).*sin(th/2))*saf;
 end
-mkdir(fullfile(pwd,[num2str(KI) '-' num2str(KII) '-' num2str(KIII) 'MPa']))
+mkdir(fullfile(pwd,[num2str(KI*1e-6) '-' num2str(KII*1e-6) '-' num2str(KIII*1e-6) 'MPa']))
 
 end
