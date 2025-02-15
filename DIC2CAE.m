@@ -151,7 +151,7 @@ if ~isempty(Direction.Raw)
         Direction.Olddiv = round(std(rmoutliers(Direction.OldRaw(contrs:end,1)),1),1);
     end
 end
-%
+
 %% plotting
 plotJKIII(KI,KII,KIII,J,Maps.stepsize,Maps.input_unit)
 saveas(gcf, [Maps.results '_J_KI_II_III.fig']);
