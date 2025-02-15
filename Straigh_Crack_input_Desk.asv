@@ -19,9 +19,10 @@ Maps.Mat 	  = 'Ferrite'; %Material Name
 %% INPUT MATERIAL PROPERTIES AND DATA
 % 'E' for Elastic material
 % Poisson's ratio,          Young's Modulus [Pa],      		    
-  Maps.nu    = 0.3;         Maps.E  = 220E9;            Maps.type  = 'E'; 
-% if 'Ramberg-Osgood' type of material input            Yield Stress [Pa] 
-% Maps.Exponent = 26.67;      Maps.Yield_offset = 1.24; Maps.yield = 4E9;
+  Maps.nu    = 0.3;         Maps.E  = 220E9;              
+  Maps.type  = 'E'; 
+% if 'Ramberg-Osgood' type of material input                Yield Stress [Pa] 
+% Maps.Exponent = 26.67;      Maps.Yield_offset = 1.24;        Maps.yield = 4E9;
 % Maps.type  = 'R';           
 % Maps.E  = 193E9;            Maps.nu    = 0.3;
 % if 'Elastic-Anisotropic' you need to define the stifness tensor 
@@ -34,26 +35,24 @@ Maps.Mat 	  = 'Ferrite'; %Material Name
 %                     0    0    0     0   0   81]*1e9;
 % Maps.nu    = 0.00;         Maps.E  = 000E9; for non-cubic materials
 
-%% %%%%%%%%%%%%%%%%%%%%%%% END of USER INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END of USER INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 Data = importdata(DataDirect);
 [~,RawData ] = reshapeData(Data.data);
-
-% to remove rigid body movement for stereo DIC
-% [theta,RawData.Ux,RawData.Uy,RawData.Uz,rotCentre] = ...
-%     RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy,RawData.Uz);
-% to remove rigid body movement for 2D DIC
-% [theta,RawData.Ux,RawData.Uy,rotCentre] = ...
-%     RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy);
-
 Maps.X  = RawData.X1;       Maps.Y = RawData.Y1;   
 Maps.Ux = RawData.Ux;       Maps.Uy = RawData.Uy;
-Maps.Z = RawData.Z1;      Maps.Uz = RawData.Uz;
-
 % [data] = Cropping10(Maps.X,Maps.Y,Maps.Ux, Maps.Uy);
-% Maps.X = data.X;       Maps.Y = data.Y;
-% Maps.Ux = data.Ux;     Maps.Uy = data.Uy;
+% Maps.X = data.X;
+% Maps.Y = data.Y;
+% Maps.Ux = data.Ux;
+% Maps.Uy = data.Uy;
 % Maps.Uy(Maps.Uy==0)=NaN;    Maps.Ux(Maps.Ux==0)=NaN;
 % Maps.Uy = inpaint_nans(Maps.Uy);
 % Maps.Ux = inpaint_nans(Maps.Ux);
-
+[theta,Maps.Ux,Maps.Uy,rotCentre] = ...
+    RotRemoving('true',Maps.X,Maps.Y,Maps.Ux,Maps.Uy);
+% to remove rigid body movement for stereo DIC
+% Maps.Z = RawData.Z1;      Maps.Uz = RawData.Uz;
+% [theta,RawData.Ux,RawData.Uy,RawData.Uz,rotCentre] = ...
+%     RotRemoving('true',Maps.X,Maps.Y,RawData.Ux,RawData.Uy);
+Map.input_unit = Maps.units.xy;
 [J,KI,KII,KIII] = DIC2CAE(Maps);
