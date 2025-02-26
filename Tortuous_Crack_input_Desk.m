@@ -3,7 +3,7 @@
 % excluded crack geomtry in a format you can use with this code, preferably
 % as a .dat file,
 
-% clc;clear;close all
+clc;clear;close all
 addpath(genpath([pwd '\Non-unifrom maps']));
 resultsDir = fullfile(pwd, 'Non-unifrom maps','Example_Data.dat'); % file location
 Maps.results = erase(resultsDir,'.dat');
