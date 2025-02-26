@@ -1,12 +1,11 @@
 % This the input desk for straight cracks where you do not need to exclude
-% the crack geomtery yourself. Here that will done automatically.
+% the crack geomtery yourself. Here that will be done automatically.
 
 % To genereat syntahtic data to validate this the code use
-% "Calibration_2DKIII" function which will creae a new folder with the
-% synthatic data that you will use with this code.
+% "InputDesk_Validate".
 clc;clear;close all
 addpath(genpath([pwd '\functions']));
-DataDirect = fullfile(pwd,'1KI-2KII-3KII_Data.dat'); % file location
+DataDirect = fullfile(pwd,'1KI-2KII-3KIII_Data.dat'); % file location
 Maps.results = erase(DataDirect,'.dat');
 % Domain size (square, crack tip at centre).
 Maps.input_unit     = 'mm';            % meter (m) or milmeter (mm) or micrometer(um);

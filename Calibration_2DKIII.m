@@ -64,5 +64,9 @@ if KIII ~= 0
     Maps.Uz = ( 2*KIII/G*sqrt(r/(2*pi)).*sin(th/2))*saf;
 end
 % mkdir(fullfile(pwd,[num2str(KI*1e-6) '-' num2str(KII*1e-6) '-' num2str(KIII*1e-6) 'MPa']))
-
+% alldata = [Maps.X(:), Maps.Y(:), Maps.Z(:),Maps.Ux(:), Maps.Uy(:), Maps.Uz(:)];
+% alldata = table(alldata(:,1), alldata(:,2), alldata(:,3), alldata(:,4),...
+%     'VariableNames',{'x','y', 'displacement_x', 'displacement_y'});
+% SaveD = [num2str(KI*1e-6) 'KI-' num2str(KII*1e-6) 'KII-' num2str(KIII*1e-6) 'KIII_Data.dat'];
+% writetable(alldata, SaveD, 'Delimiter',' ');
 end
